@@ -283,31 +283,58 @@
 
         <!-- Contact Section -->
         <section id="contact" class="py-5">
-            <div class="container text-center">
-                <h2 class="mb-5 fw-bold">Contact Me</h2>
-                <p class="mt-3 contact-text fs-5">Let's work together! Reach me
-                    at <a href="mailto:aniket72094087100@gmail.com"
-                        class="text-cyan fw-bold">aniket72094087100@gmail.com</a></p>
-                <div class="row mt-5">
-                    <div class="col-md-6 mx-auto">
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
                         <div class="card p-4">
-                            <form>
+                            <h2 class="text-center mb-4">Contact Me</h2>
+                            <p class="text-center mb-4">Have questions or want
+                                to
+                                work together? Fill out the form below and I'll
+                                get
+                                back to you as soon as possible.</p>
+
+                            <form id="contactForm">
                                 <div class="mb-3">
+                                    <label for="name"
+                                        class="form-label required-field">Full
+                                        Name</label>
                                     <input type="text" class="form-control"
-                                        placeholder="Your Name">
+                                        id="name" name="entry.568073497"
+                                        required>
                                 </div>
+
                                 <div class="mb-3">
+                                    <label for="email"
+                                        class="form-label required-field">Email
+                                        Address</label>
                                     <input type="email" class="form-control"
-                                        placeholder="Your Email">
+                                        id="email" name="entry.509036446"
+                                        required>
                                 </div>
+
+
                                 <div class="mb-3">
-                                    <textarea class="form-control" rows="4"
-                                        placeholder="Your Message"></textarea>
+                                    <label for="message"
+                                        class="form-label required-field">Message</label>
+                                    <textarea class="form-control" id="message"
+                                        rows="5" name="entry.958025149"
+                                        required></textarea>
                                 </div>
+
                                 <button type="submit"
-                                    class="btn btn-cyan w-100">Send
-                                    Message</button>
+                                    class="btn btn-primary w-100">
+                                    <i class="fas fa-paper-plane me-2"></i>Send
+                                    Message
+                                </button>
                             </form>
+
+                            <div id="successMessage"
+                                class="success-message mt-4">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Thank you for your message! I'll get back to you
+                                soon.
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -335,5 +362,49 @@
 
         <!-- Custom JS -->
         <script src="script.js"></script>
+        <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                // Hide success message initially
+                document.getElementById('successMessage').style.display = 'none';
+
+                // Form submission handling
+                document.getElementById('contactForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
+                    submitBtn.disabled = true;
+
+                    const formData = new FormData(this);
+                    const formAction = 'https://docs.google.com/forms/d/e/1FAIpQLScUCwW7I300d2He-mU20B63E8VW3UO18ZCOjgAWj8JkRw-NoQ/formResponse';
+
+                    const urlEncodedData = new URLSearchParams();
+                    for (const [name, value] of formData) {
+                        urlEncodedData.append(name, value);
+                    }
+
+                    fetch(formAction, {
+                        method: 'POST',
+                        body: urlEncodedData,
+                        mode: 'no-cors'
+                    })
+                    .then(() => {
+                        document.getElementById('successMessage').style.display = 'block';
+                        this.reset();
+                        document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('There was an error sending your message. Please try again later.');
+                    })
+                    .finally(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    });
+                });
+            });
+
+        </script>
     </body>
 </html>
